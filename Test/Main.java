@@ -7,8 +7,6 @@ public class Main {
 		// insert test
 		new MemberADM();
 
-		
-
 	}
 
 }
