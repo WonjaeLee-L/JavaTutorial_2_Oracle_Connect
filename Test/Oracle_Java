@@ -1,0 +1,46 @@
+** 오라클 연동(DAO, DTO)
+(라이브러리(자바 소스파일 묶음, 클래스 형태)를 Oracle이 배포. 자바에서 Oracle 쓰고싶을 때, 활용하라고 준다.)
+(라이브러리 사용방법은 Oracle이 제공한 java 클래스를 활용)
+(코드짤 때 >> 1. 컨셉을 이해, 2. 배포한 라이브러리를 jvm으로 가져와서 여기있는 객체를 가지고 원하는 작업을 한다.)
+(확장자 jar로 배포했다 : 라이브러리 배포했다)
+(사용하는 것 : ojdbc6을 썼고 확장자는 jar파일)
+
+
+-----RAM(메모리)-----							Member
+l             ...           l
+l             ...           l  							P	S	id;
+l            jvm          l							P	S	name;
+l (Java binary를 실행) l							P	i	age;
+l             ...           l
+l          Oracle        l
+l             ...           l	>> RAM에서 jvm, orcle 서로 다른 영역에 저장
+-----------------------
+	insert, delete, select, update(정보를 주고)
+jvm  -------------------------------------> Oracle
+      <-------------------------------------
+              	결과값을 준다
+
+
+
+* JVM에 존재하는 코드
+Member m = new Member();
+	m.id = "a";
+	m.name="kim";
+	m.age=32;
+>> 일단 jvm에 저장 됨, pc종료시 삭제
+>> 영구 저장을 위해 오라클에 저장
+
+* 오라클에 존재하는 코드
+DB에 저장하기위해 table을 생성.
+id, name, age 컬럼으로 테이블 생성
+a, kim 32를 insert하면 pc종료해도 남아있다.
+
+* 오라클의 튜플 하나 당 jvm에서 객체 한 개
+튜플의 데이터를 객체에 저장해서 자바로 가져온다.
+** 이 역할을 하는 객체의 이름을 DTO라 한다.
+MemberDTO >> Oracle DB에 있는 Member라는 튜플을 자바로 옮기는 객체
+	         또는, 반대로 자바에 있는 객체를 Oracle DB의 튜플로 옮기는 객체
+
+
+DTO(Data Transfer Object)
+데이터를 전송하는 객체
