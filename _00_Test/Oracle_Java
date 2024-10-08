@@ -1,0 +1,64 @@
+** 오라클 연동(DAO, DTO)
+라이브러리(자바 소스파일 묶음, 클래스 형태)를 Oracle이 배포. 자바에서 Oracle 쓰고싶을 때, 활용하라고 준다.
+라이브러리 사용방법은 Oracle이 제공한 java 클래스를 활용
+코드짤 때 >> 1. 컨셉을 이해, 2. 배포한 라이브러리를 jvm으로 가져와서 여기있는 객체를 가지고 원하는 작업을 한다.
+확장자 jar로 배포했다 : 라이브러리 배포했다
+사용하는 것 : ojdbc6을 썼고 확장자는 jar파일
+
+운영체제 : 컴퓨터를 구성하는 하드웨어 자원을 관리하는 역할
+운영체제 내에 CPU(중앙처리장치), RAM(random access memory), HDD(harddisc), keyboard, Lan...
+
+---------RAM(메모리)----------							Member
+l             ...           l
+l             ...           l  							P	S	id;
+l            jvm            l							P	S	name;
+l     -Java binary를 실행-    l							P	i	age;
+l             ...           l
+l             ...           l
+l          Oracle           l
+l             ...           l	>> RAM에서 jvm, orcle 서로 다른 영역에 저장
+-----------------------------
+
+	insert, delete, select, update(정보를 주고)
+jvm  -------------------------------------> Oracle
+      <-------------------------------------
+              	결과값을 준다
+
+Scanner 객체를 만들면 >> JVM은 혼자 처리 못하고, keyboard자원을 빌려와야 한다.
+keyboard는 여기저기서 다 쓴다. 이런 자원은 예외처리를 하고 꼭 반납한다.
+본인의 능력이 아니라 다른 시스템의 자원을 빌렸을 때에는 예외처리를 해주는 것이 좋다. >> 쓰고 반납
+입출력(IO)의 경우에는 HDD의 자원을 빌리고, connection은 Oracle자원을 빌리는 것이다. >> 쓰고 반납
+									(connection : 오라클에 들어가도록 할 수 있게 하는 자원)
+connection pool(DataBase Connection Pool) ? 
+>> JVM이 DB(Oracle)에 접근하기위한 자원이 connection이다. 
+   허용가능한 갯수를 정해놓는게 connection pool
+   오라클을 허락받은 사람이 누구나 사용할 수 있게 하는데, 시스템 안정을 위해 자원을 무한정 제공은 안해준다는 두 가지의 의미
+
+									 
+
+
+* JVM에 존재하는 코드
+Member m = new Member();
+	m.id = "a";
+	m.name="kim";
+	m.age=32;
+>> 일단 jvm에 저장 됨, pc종료시 삭제
+>> 영구 저장을 위해 오라클에 저장
+
+* 오라클에 존재하는 코드
+DB에 저장하기위해 table을 생성.
+id, name, age 컬럼으로 테이블 생성
+a, kim 32를 insert하면 pc종료해도 남아있다.
+
+* 오라클의 튜플 하나 당 jvm에서 객체 한 개
+튜플의 데이터를 객체에 저장해서 자바로 가져온다.
+** 이 역할을 하는 객체의 이름을 DTO라 한다.
+MemberDTO >> Oracle DB에 있는 Member라는 튜플을 자바로 옮기는 객체
+	         또는, 반대로 자바에 있는 객체를 Oracle DB의 튜플로 옮기는 객체
+
+
+* DTO(Data Transfer Object)
+데이터를 전송하는 객체
+
+* DAO(Database Access), DTO >> 클래스 설계와 관련
+* 싱클톤(Static, final) >> 디자인과 관련
